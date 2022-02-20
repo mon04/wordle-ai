@@ -4,8 +4,8 @@ import java.util.LinkedList;
 
 public class AI {
 
-    public static LinkedList<Word> potentials;
-    public static int[] frequencies = new int[26];
+    private static LinkedList<Word> potentials;
+    private static int[] frequencies = new int[26];
 
     public AI() {
         potentials = Utils.getListFromFile("src/words.txt");
@@ -18,8 +18,8 @@ public class AI {
         Collections.sort(potentials);
     }
 
-    public void filterByFeedback(String feedback) {
-        // write me
+    public void filterByFeedback(String green, String yellow, String grey) {
+        potentials.removeIf(word -> !word.checkValid(green, yellow, grey));
     }
 
     public void printAllSums() {
@@ -44,6 +44,20 @@ public class AI {
             word.calculateSum();
     }
 
+    public String getSuggestion() {
+        try {
+            return potentials.get(0).value;
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public int listSize() {
+        return potentials.size();
+    }
+
     static class Word implements Comparable<Word> {
 
         public String value;
@@ -63,6 +77,53 @@ public class AI {
                     used[i]=true;
                 }
             }
+        }
+
+        public boolean checkValid(String green, String yellow, String grey) {
+            return greenValid(green) && yellowValid(yellow) && greyValid(grey);
+        }
+
+        private boolean greenValid(String pattern) {
+            char[] pc = pattern.toCharArray();
+            char[] wc = value.toCharArray();
+            for(int i=0; i < pc.length; i++) {
+                if(pc[i] != '_' && pc[i] != wc[i]) {
+                    //System.out.println(value + " failed GREEN");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private boolean yellowValid(String pattern) {
+            char[] p = pattern.toCharArray();
+            for(int i=0; i < p.length; i++) {
+                if(p[i] != '_' && !containsElsewhere(value, p[i], i)) {
+                    //System.out.println(value + " failed YELLOW");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private boolean greyValid(String pattern) {
+            for(char pc : pattern.toCharArray()) {
+                if(pc != '_' && value.contains(pc + "")) {
+                    //System.out.println(value + " failed GREY");
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private static boolean containsElsewhere(String word, char c, int pos) {
+            if(!word.contains(c + ""))
+                return false;
+            for(int i=0; i < word.length(); i++) {
+                if(i!=pos && word.charAt(i) == c)
+                    return true;
+            }
+            return false;
         }
 
         @Override
