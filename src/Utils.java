@@ -6,7 +6,7 @@ import java.util.Scanner;
 public class Utils {
 
     private static File validsFile = new File("src/words.txt");
-    private static File answersFile = new File("src/words.txt");
+    private static File answersFile = new File("src/wordles.txt");
     private static int validsSize = sizeOfFile(Source.VALIDS);
     private static int answersSize = sizeOfFile(Source.ANSWERS);
 
@@ -71,7 +71,7 @@ public class Utils {
         }
         else {
             try {
-                scan = new Scanner(validsFile);
+                scan = new Scanner(answersFile);
                 return scan;
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
