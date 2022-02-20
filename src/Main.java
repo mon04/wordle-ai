@@ -2,16 +2,19 @@ public class Main {
     public static void main(String[] args) {
         AI ai = new AI();
         Game game = new Game(6);
-        System.out.println("answer: "+game.answer);
-        while(game.turnsUsed < game.MAX_TURNS) {
+        System.out.println("answer: "+game.answer+"\n");
+        String feedback = "_____";
+        while(game.turnsUsed < game.MAX_TURNS && !feedback.equals("22222")) {
             String guess = ai.getSuggestion();
-            String feedback = game.getFeedback(guess);
-            System.out.printf("%s\t%s\n", guess, feedback);
+            feedback = game.getFeedback(guess);
             String green = feedback('2', feedback, guess);
             String yellow = feedback('1', feedback, guess);
             String grey = feedback('0', feedback, guess);
             ai.filterByFeedback(green, yellow, grey);
-            System.out.println("words left: "+ai.listSize());
+
+            System.out.println(game.turnsUsed+". "+guess);
+            System.out.print(game.turnsUsed+". "+feedback);
+            System.out.printf(" [%d]\n\n", ai.listSize());
         }
     }
 
