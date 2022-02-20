@@ -3,7 +3,7 @@ import java.util.Arrays;
 public class Game {
 
     private String[] valids = Utils.fileToArray(Utils.Source.VALIDS);
-    public String answer = Utils.randomFrom(Utils.Source.VALIDS);
+    public String answer = Utils.randomFrom(Utils.Source.ANSWERS);
     public final int MAX_TURNS;
     public int turnsUsed=0;
 
