@@ -18,7 +18,10 @@ public class AI {
         Collections.sort(potentials);
     }
 
-    public void filterByFeedback(String green, String yellow, String grey) {
+    public void filterByFeedback(String feedback, String guess) {
+        String green = pattern(Colour.GREEN, feedback, guess);
+        String yellow = pattern(Colour.YELLOW, feedback, guess);
+        String grey = pattern(Colour.GREY, feedback, guess);
         potentials.removeIf(word -> !word.checkValid(green, yellow, grey));
     }
 
@@ -51,6 +54,31 @@ public class AI {
 
     public int listSize() {
         return potentials.size();
+    }
+
+    public static String pattern(Colour colour, String feedback, String guess) {
+        StringBuilder fb = new StringBuilder();
+        for(int i=0; i < feedback.length(); i++) {
+            char fc = feedback.charAt(i);
+            char gc = guess.charAt(i);
+            char cc = colour.getChar();
+            fb.append((fc == cc) ?gc :'_');
+        }
+        return fb.toString();
+    }
+
+    enum Colour {
+        GREEN('2'), YELLOW('1'), GREY('0');
+
+        private char c;
+
+        Colour(char c) {
+            this.c = c;
+        }
+
+        public char getChar() {
+            return c;
+        }
     }
 
     static class Word implements Comparable<Word> {

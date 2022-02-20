@@ -4,27 +4,20 @@ public class Main {
         Game game = new Game(6);
         System.out.println("answer: "+game.answer+"\n");
         String feedback = "_____";
-        while(game.turnsUsed < game.MAX_TURNS && !feedback.equals("22222")) {
+        while(game.turn < game.MAX_TURNS) {
             String guess = ai.getSuggestion();
-            feedback = game.getFeedback(guess);
-            String green = feedback('2', feedback, guess);
-            String yellow = feedback('1', feedback, guess);
-            String grey = feedback('0', feedback, guess);
-            ai.filterByFeedback(green, yellow, grey);
+            game.submitGuess(guess);
+            feedback = game.getLatestFeedback();
+            System.out.println("possible answers: "+ai.listSize());
+            ai.filterByFeedback(feedback, guess);
 
-            System.out.println(game.turnsUsed+". "+guess);
-            System.out.print(game.turnsUsed+". "+feedback);
-            System.out.printf(" [%d]\n\n", ai.listSize());
-        }
-    }
+            System.out.println(game.turn+". "+guess);
+            System.out.println("   "+feedback+"\n");
 
-    public static String feedback(char type, String genFb, String guess) {
-        StringBuilder fb = new StringBuilder();
-        for(int i=0; i < genFb.length(); i++) {
-            char c = genFb.charAt(i);
-            char gc = guess.charAt(i);
-            fb.append((c == type) ?gc :'_');
+            if(feedback.equals("22222")) {
+                System.out.printf("Solved in %d/%d turns!", game.turn, game.MAX_TURNS);
+                System.exit(0);
+            }
         }
-        return fb.toString();
     }
 }
