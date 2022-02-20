@@ -45,13 +45,8 @@ public class AI {
     }
 
     public String getSuggestion() {
-        try {
-            return potentials.get(0).value;
-        }
-        catch(Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        assert potentials.size() > 0;
+        return potentials.get(0).value;
     }
 
     public int listSize() {
