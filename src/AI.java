@@ -8,7 +8,7 @@ public class AI {
     private static int[] frequencies = new int[26];
 
     public AI() {
-        potentials = Utils.getListFromFile("src/words.txt");
+        potentials = Utils.fileToList(Utils.Source.VALIDS);
         this.setUp();
     }
 
